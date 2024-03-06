@@ -1,0 +1,14 @@
+{
+    "name": "framework-arduino-sophgo",
+    "description": "Arduino Wiring-based Framework (Sophgo Core)",
+    "version": "0.2.3",
+    "url": "https://github.com/xxx/arduino-sophgo",
+    "keywords": [
+        "framework",
+        "arduino",
+        "sophgo",
+        "sg200x",
+        "Duo",
+        "Duo256"
+    ]
+}

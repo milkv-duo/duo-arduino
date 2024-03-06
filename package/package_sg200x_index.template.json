@@ -1,0 +1,129 @@
+{
+  "packages": [
+    {
+      "name": "sophgo",
+      "maintainer": "Sophgo",
+      "websiteURL": "https://github.com/kubuds/arduino-sophgo",
+      "email": "global.support@sophgo.com",
+      "help": {
+        "online": "https://community.milkv.io/"
+      },
+      "platforms": [
+        {
+          "name": "SG200X",
+          "architecture": "SG200X",
+          "version": "0.2.1",
+          "category": "SG200X",
+          "url": "http://127.0.0.1/arduino-sophgo.zip",
+          "archiveFileName": "arduino-sophgo.zip",
+          "checksum": "SHA-256:ea36cefde30d2c68de3b4b6b2c45af8cbb0f1e6df3384be90fac789d1a8a6af5",
+          "size": "638214",
+          "help": {
+            "online": "https://community.milkv.io/"
+          },
+          "boards": [
+            {
+              "name": "Milkv Duo Dev Board"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "sophgo",
+              "name": "xpack-riscv-none-elf-gcc",
+              "version": "13.2.0-2"
+            },
+            {
+              "packager": "sophgo",
+              "name": "burntool_py",
+              "version": "0.2"
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "xpack-riscv-none-elf-gcc",
+          "version": "13.2.0-2",
+          "systems": [
+            {
+              "host": "x86_64-mingw32",
+              "archiveFileName": "xpack-riscv-none-elf-gcc-13.2.0-2-win32-x64.zip",
+              "url": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v13.2.0-2/xpack-riscv-none-elf-gcc-13.2.0-2-win32-x64.zip",
+              "checksum": "SHA-256:28ce9f0cfa09f8d4c638a59fb4e17e3f61c80c47e46f11b2ba505a2a3db602f8",
+              "size": "575804723"
+            },
+            {
+              "host": "x86_64-linux-gnu",
+              "archiveFileName": "xpack-riscv-none-elf-gcc-13.2.0-2-linux-x64.tar.gz",
+              "url": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v13.2.0-2/xpack-riscv-none-elf-gcc-13.2.0-2-linux-x64.tar.gz",
+              "checksum": "SHA-256:52545afb900200fbf65fe05f7ce7090b8a42c64091f4f5d43cae6bb68ea2434a",
+              "size": "514514778"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "xpack-riscv-none-elf-gcc-13.2.0-2-darwin-x64.tar.gz",
+              "url": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v13.2.0-2/xpack-riscv-none-elf-gcc-13.2.0-2-darwin-x64.tar.gz",
+              "checksum": "SHA-256:72e65bcad6360eb059096a0fb77f3e3e6c618b1281b89648056c95d1b2749466",
+              "size": "506786123"
+            },
+            {
+              "host": "arm64-apple-darwin",
+              "archiveFileName": "xpack-riscv-none-elf-gcc-13.2.0-2-darwin-arm64.tar.gz",
+              "url": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v13.2.0-2/xpack-riscv-none-elf-gcc-13.2.0-2-darwin-arm64.tar.gz",
+              "checksum": "SHA-256:dfe3123e5e5093b165eaaf18401b802cbb8697f5ec9b0f5cfd99c45e848fd8a7",
+              "size": "503063487"
+            },
+            {
+              "host": "aarch64-linux-gnu",
+              "archiveFileName": "xpack-riscv-none-elf-gcc-13.2.0-2-linux-arm64.tar.gz",
+              "url": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v13.2.0-2/xpack-riscv-none-elf-gcc-13.2.0-2-linux-arm64.tar.gz",
+              "checksum": "SHA-256:1c981c611a38dfe5af902089aed570d4dd501eb4ed88d801043e59ab9a62a86a",
+              "size": "511508420"
+            }
+          ]
+        },
+        {
+          "name": "burntool_py",
+          "version": "0.2",
+          "systems": [
+            {
+              "host": "x86_64-mingw32",
+              "archiveFileName": "burntool.zip",
+              "url": "http://127.0.0.1/burntool.zip",
+              "checksum": "SHA-256:01e622de5589e86b53086b72be48cdc7b34a44b3125585970454e0472a4355d8",
+              "size": "1694"
+            },
+            {
+              "host": "x86_64-linux-gnu",
+              "archiveFileName": "burntool.tar.gz",
+              "url": "http://127.0.0.1/burntool.tar.gz",
+              "checksum": "SHA-256:984fe379dd838d481fce5bdbfd3383e3077c96d7e6ffc0f0d8e081a7591bf6e6",
+              "size": "1499"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "burntool.tar.gz",
+              "url": "http://127.0.0.1/burntool.tar.gz",
+              "checksum": "SHA-256:984fe379dd838d481fce5bdbfd3383e3077c96d7e6ffc0f0d8e081a7591bf6e6",
+              "size": "1499"
+            },
+            {
+              "host": "arm64-apple-darwin",
+              "archiveFileName": "burntool.tar.gz",
+              "url": "http://127.0.0.1/burntool.tar.gz",
+              "checksum": "SHA-256:984fe379dd838d481fce5bdbfd3383e3077c96d7e6ffc0f0d8e081a7591bf6e6",
+              "size": "1499"
+            },
+            {
+              "host": "aarch64-linux-gnu",
+              "archiveFileName": "burntool.tar.gz",
+              "url": "http://127.0.0.1/burntool.tar.gz",
+              "checksum": "SHA-256:984fe379dd838d481fce5bdbfd3383e3077c96d7e6ffc0f0d8e081a7591bf6e6",
+              "size": "1499"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
