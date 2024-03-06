@@ -1,0 +1,143 @@
+# tools.hosts_tools.path={runtime.tools.host-tools.path}
+# compiler.path={tools.hosts_tools.path}/gcc/riscv64-elf-x86_64/bin/
+# compiler.prefix={build.tarch}-{build.target}-elf-
+
+# Compilers
+tools.xpack-riscv-none-elf-gcc.path= {runtime.tools.xpack-riscv-none-elf-gcc.path}
+compiler.path={tools.xpack-riscv-none-elf-gcc.path}/bin/
+compiler.prefix=riscv-none-elf-
+
+# EXPERIMENTAL feature: optimization flags
+#  - this is alpha and may be subject to change without notice
+compiler.optimization_flags=-Os
+compiler.optimization_flags.release=-Os
+compiler.optimization_flags.debug=-Og -g3
+
+# Arduino Compile Warning Levels
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall -Werror=all
+compiler.warning_flags.all=-Wall -Werror=all -Wextra
+
+# Compile Flags
+compiler.cores.path={runtime.platform.path}/cores/{build.core}
+compiler.cores.include.path={runtime.platform.path}/cores/{build.core}/include
+compiler.bsp.path={compiler.cores.path}/bsp
+compiler.bsp.include.path={compiler.bsp.path}/include
+compiler.hal.include.path={compiler.bsp.include.path}/hal
+compiler.csi.include.path={compiler.bsp.include.path}/csi
+compiler.cvi.include.path={compiler.bsp.include.path}/cvi
+compiler.hal.dw.include.path={compiler.hal.include.path}/dw
+
+compiler.includes.flags="-I." "-I{compiler.cores.include.path}" "-I{compiler.bsp.include.path}" "-I{compiler.hal.include.path}" "-I{compiler.csi.include.path}" "-I{compiler.cvi.include.path}" "-I{compiler.hal.dw.include.path}"
+
+compiler.lib.flags=-D__riscv64
+compiler.c_cpp.flags={compiler.lib.flags} -mcmodel=medany -mabi=lp64d -march=rv64imfd_zicsr
+
+compiler.cpreprocessor.flags="-I{build.source.path}"
+compiler.c.flags= -c {compiler.includes.flags} {compiler.warning_flags} {compiler.optimization_flags} {compiler.c_cpp.flags}
+compiler.cpp.flags= -c {compiler.includes.flags} {compiler.warning_flags} {compiler.optimization_flags} {compiler.c_cpp.flags}
+compiler.S.flags= -c {compiler.includes.flags} {compiler.warning_flags} {compiler.optimization_flags} {compiler.c_cpp.flags}
+compiler.c.elf.flags=-nostartfiles -Wl,--no-warn-rwx-segments -mcmodel=medany -mabi=lp64d -march=rv64imfd_zicsr
+compiler.c.elf.libs=
+compiler.ar.flags=cr
+
+# Compilers
+compiler.c.cmd={compiler.prefix}gcc
+compiler.cpp.cmd={compiler.prefix}g++
+compiler.S.cmd={compiler.prefix}gcc
+compiler.c.elf.cmd={compiler.prefix}g++
+compiler.as.cmd={compiler.prefix}as
+compiler.ar.cmd={compiler.prefix}gcc-ar
+compiler.size.cmd={compiler.prefix}size
+compiler.objcopy.cmd={compiler.prefix}objcopy
+compiler.objdump.cmd={compiler.prefix}objdump
+
+# These can be overridden in platform.local.txt
+compiler.c.extra_flags=-MMD -c
+compiler.cpp.extra_flags=-MMD -c
+compiler.S.extra_flags=-MMD -c -x assembler-with-cpp
+compiler.c.elf.extra_flags="-Wl,--Map={build.path}/{build.project_name}.map"
+compiler.ar.extra_flags=
+compiler.objcopy.eep.extra_flags=
+compiler.elf2hex.extra_flags=
+compiler.elf2asm.extra_flags=
+compiler.libraries.ldflags=
+
+compiler.elf2hex.bin.flags=-O binary
+compiler.elf2hex.hex.flags=-O ihex -R .eeprom
+compiler.elf2hex.cmd={compiler.prefix}objcopy
+compiler.elf2asm.asm.flags=-D
+compiler.elf2asm.cmd={compiler.prefix}objdump
+
+## Compile c files
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.extra_flags} {compiler.c.flags} -DF_CPU={build.f_cpu} -DSTART_ADDR={build.start_addr} -DIMAGE_SIZE={build.image_size} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_BOARD="{build.board}" -DARDUINO_VARIANT="{build.variant}" -DARDUINO_PARTITION_{build.partitions} {build.extra_flags} {compiler.cpreprocessor.flags} {includes}  "{source_file}" -o "{object_file}"
+
+## Compile c++ files
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.extra_flags} {compiler.cpp.flags} -DF_CPU={build.f_cpu} -DSTART_ADDR={build.start_addr} -DIMAGE_SIZE={build.image_size} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_BOARD="{build.board}" -DARDUINO_VARIANT="{build.variant}" -DARDUINO_PARTITION_{build.partitions} {build.extra_flags} {compiler.cpreprocessor.flags} {includes}  "{source_file}" -o "{object_file}"
+
+## Compile S files
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.extra_flags} {compiler.S.flags} -DF_CPU={build.f_cpu} -DSTART_ADDR={build.start_addr} -DIMAGE_SIZE={build.image_size} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_BOARD="{build.board}" -DARDUINO_VARIANT="{build.variant}" -DARDUINO_PARTITION_{build.partitions} {build.extra_flags} {compiler.cpreprocessor.flags} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+
+## Combine gc-sections, archives, and objects
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}"  "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" --specs=nano.specs --specs=nosys.specs -o "{build.path}/{build.project_name}.elf" {object_files} {compiler.libraries.ldflags} -Wl,--start-group -lm "{build.path}/{archive_file}" -Wl,--end-group
+
+## Create output (bin file)
+recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.bin.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+## Create output (hex file)
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+
+## Create output (asm file)
+##recipe.objcopy.asm.pattern="{compiler.path}{compiler.elf2asm.cmd}" {compiler.elf2asm.asm.flags} {compiler.elf2asm.extra_flags} "{build.path}/{build.project_name}.elf" ">" "{build.path}/{build.project_name}.asm"
+##recipe.objcopy.asm.pattern.linux="{compiler.path}{compiler.elf2asm.cmd}" {compiler.elf2asm.asm.flags} {compiler.elf2asm.extra_flags} "{build.path}/{build.project_name}.elf" ">" "{build.path}/{build.project_name}.asm"
+##recipe.objcopy.asm.pattern.windows=cmd /c "{compiler.path}{compiler.elf2asm.cmd}" {compiler.elf2asm.asm.flags} {compiler.elf2asm.extra_flags} "{build.path}/{build.project_name}.elf" ">" "{build.path}/{build.project_name}.asm"
+
+build.preferred_out_format=bin
+
+## Compute size
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -B "{build.path}/{build.project_name}.elf"
+recipe.size.regex=\s*[0-9]+\s+[0-9]+\s+[0-9]+\s+([0-9]+).*
+recipe.size.regex.data=\s*[0-9]+\s+[0-9]+\s+[0-9]+\s+([0-9]+).*
+
+## burntool_py
+
+tools.burntool_py.path={runtime.tools.burntool_py.path}
+tools.burntool_py.cmd=burntool
+tools.burntool_py.cmd.linux=burntool.py
+tools.burntool_py.cmd.windows=burntool.py
+
+## upload
+
+tools.burntool_py.upload.protocol=serial
+tools.burntool_py.upload.params.verbose=
+tools.burntool_py.upload.params.quiet=
+tools.burntool_py.upload.pattern_args= -p "{serial.port}" -f {build.path}/{build.project_name}.elf
+tools.burntool_py.upload.pattern=python3 "{path}/{cmd}" {upload.pattern_args}
+tools.burntool_py.upload.pattern.windows=python "{path}/{cmd}" {upload.pattern_args}
+
+## program
+
+tools.burntool_py.program.params.verbose=
+tools.burntool_py.program.params.quiet=
+tools.burntool_py.program.pattern_args=
+tools.burntool_py.program.pattern=
+
+## erase
+
+tools.burntool_py.erase.protocol=serial
+tools.burntool_py.erase.params.verbose=
+tools.burntool_py.erase.params.quiet=
+tools.burntool_py.erase.pattern_args=
+tools.burntool_py.erase.pattern=
+
+## bootloader
+
+tools.burntool_py.bootloader.protocol=serial
+tools.burntool_py.bootloader.params.verbose=
+tools.burntool_py.bootloader.params.quiet=
+tools.burntool_py.bootloader.pattern=

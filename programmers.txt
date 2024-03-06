@@ -1,0 +1,8 @@
+burntool.name=Burntool
+burntool.communication=serial
+burntool.protocol=serial
+burntool.program.protocol=serial
+burntool.program.tool=burntool_py
+burntool.program.tool.default=burntool_py
+burntool.program.extra_params=
+burntool.extra_params=
