@@ -192,14 +192,19 @@ uint8_t TwoWire::endTransmission(bool stopBit)
         data[i++] = txBuffer.read_char();
     }
 
-    switch (csi_iic_master_send(&_iic, txAddress, data, i, _timeout, stopBit)) {
+    int ret = csi_iic_master_send(&_iic, txAddress, data, i, _timeout, stopBit);
+    switch (ret) {
     case CSI_OK:
         return 0;
     case CSI_TIMEOUT:
         return 5;
     default:
-        return 4;
+	if (ret > 0)
+            return 0;
+        else
+	    return 4;
     }
+
     return 0;
 }
 
